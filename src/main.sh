@@ -17,7 +17,7 @@ storage_file="address_book.csv"
 
 if ! [ -e "$storage_file" ]; then
     touch "$storage_file"
-    echo "Name,Surname,Email,Phone(Home),Phone(Mobile),Address" > "$storage_file"
+    printf "Name,Surname,Phone,Email\n" > "$storage_file"
 fi
 
 # get user input, if not provided, keep asking for
@@ -30,14 +30,17 @@ echo "4. REMOVE"
 echo "5. EDIT"
 echo -n "YOUR CHOICE (1/2/3/4/5): "
 read choice
-echo
 do
     if [ -n "$choice" ]; then
         # run user option
         case "$choice" in
-            1)  view_address_book
+            1)  echo
+                view_address_book "$storage_file"
             ;;
-            2)  echo "SEARCH"
+            2)  echo -n "PLEASE ENTER CONTACT PERSON (NAME,SURNAME): "
+                read name
+                search_contact_person "$name"
+                echo $?
             ;;
             3)  echo "ADD"
             ;;
@@ -45,7 +48,8 @@ do
             ;;
             5)  echo "EDIT"
             ;;
-            *)  echo "CAN NOT RECOGNIZE."
+            *)  echo
+                echo "CAN NOT RECOGNIZE."
             ;;
         esac
     else
