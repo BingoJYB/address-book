@@ -39,8 +39,7 @@ do
             ;;
             2)  echo -n "PLEASE ENTER CONTACT PERSON (NAME,SURNAME): "
                 read name
-                search_contact_person "$name"
-                echo $?
+                search_contact_person "$storage_file" "$name"
             ;;
             3)  echo "ADD"
             ;;
