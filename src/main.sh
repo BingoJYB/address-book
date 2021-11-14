@@ -42,8 +42,16 @@ do
                 search_contact_person "$storage_file" "$name"
             ;;
             3)  echo "ADD"
+                read -p "Enter [Name]: " name
+                read -p "Enter [Surname]: " surname
+                read -p "Enter [Phone]: " phone
+                read -p "Enter [Email]: " email
+                add_contact_person "$storage_file" "$name" "$surname" "$phone" "$email"
             ;;
             4)  echo "REMOVE"
+                read -p "Enter [Name]: " name
+                read -p "Enter [Surname]: " surname
+                remove_contact_person "$storage_file" "$name" "$surname"
             ;;
             5)  echo "EDIT"
             ;;

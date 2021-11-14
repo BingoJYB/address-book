@@ -24,6 +24,21 @@ search_contact_person () {
             fi
         done < $1
     else
-        echo "INVALID NAME LENGTH!!!"
+        echo -e "\nINVALID NAME LENGTH!!!"
     fi
+}
+
+add_contact_person () {
+    echo "$2,$3,$4,$5" >> "$1"
+    
+    if [[ "$?" == 0 ]]; then
+        echo -e "\nADD CONTACT PERSON SUCCEEDS"
+    else
+        echo -e "\nADD CONTACT PERSON FAILS"
+    fi
+}
+
+remove_contact_person () {
+    sed -i "/\<$2,$3\>/d" "$1"
+    echo -e "\nDONE"
 }
