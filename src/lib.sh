@@ -7,24 +7,12 @@ view_address_book () {
 }
 
 search_contact_person () {
-    fullname=(${2//,/ })
+    res=$( sed -nr "/^$2/p" "$1" )
     
-    if (( ${#fullname[@]} == 2 )); then
-        count=0
-        
-        while IFS=, read -r name surname email phone; do
-            count=$((count+1))
-            
-            if [[ "${fullname[0],,}" == "${name,,}" && "${fullname[1],,}" == "${surname,,}" || $count == 1 ]]; then
-                printf "%-14s %-17s %-15s %-20s\n" "$name" "$surname" "$email" "$phone"
-                
-                if [[ $count != 1 ]]; then
-                    break
-                fi
-            fi
-        done < $1
+    if [[ -n "$res" ]]; then
+        echo -e "\n$res"
     else
-        echo -e "\nINVALID NAME LENGTH!!!"
+        echo -e "\nDO NOT FIND"
     fi
 }
 
@@ -39,6 +27,12 @@ add_contact_person () {
 }
 
 remove_contact_person () {
-    sed -i "/\<$2,$3\>/d" "$1"
-    echo -e "\nDONE"
+    res=$( sed -nr "/\<$2\>/p" "$1" )
+    
+    if [[ -n "$res" ]]; then
+        echo -e "\nREMOVE $res"
+        sed -i "/\<$2\>/d" "$1"
+    else
+        echo -e "\nNO RECORD IS REMOVED"
+    fi
 }
