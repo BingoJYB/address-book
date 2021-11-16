@@ -37,21 +37,56 @@ do
             1)  echo
                 view_address_book "$storage_file"
             ;;
-            2)  echo -n "PLEASE ENTER CONTACT PERSON (NAME,SURNAME): "
-                read name
-                search_contact_person "$storage_file" "$name"
+            2)  read -p "Enter [Name]: " name
+                read -p "Enter [Surname]: " surname
+                
+                res=$( search_contact_person "$storage_file" "$name" "$surname" )
+                
+                if [[ -n "$res" ]]; then
+                    echo -e "\n$res"
+                else
+                    echo -e "\nDO NOT FIND"
+                fi
             ;;
             3)  read -p "Enter [Name]: " name
                 read -p "Enter [Surname]: " surname
                 read -p "Enter [Phone]: " phone
                 read -p "Enter [Email]: " email
+                
                 add_contact_person "$storage_file" "$name" "$surname" "$phone" "$email"
+                
+                if [[ "$?" == 0 ]]; then
+                    echo -e "\nADD $name,$surname,$phone,$email"
+                else
+                    echo -e "\nADD CONTACT PERSON FAILS"
+                fi
             ;;
-            4)  echo -n "PLEASE ENTER CONTACT PERSON (NAME,SURNAME): "
-                read name
-                remove_contact_person "$storage_file" "$name"
+            4)  read -p "Enter [Name]: " name
+                read -p "Enter [Surname]: " surname
+                
+                res=$( search_contact_person "$storage_file" "$name" "$surname" )
+                
+                if [[ -n "$res" ]]; then
+                    echo -e "\nREMOVE $res"
+                    remove_contact_person "$storage_file" "$name" "$surname"
+                else
+                    echo -e "\nNO RECORD IS REMOVED"
+                fi
             ;;
-            5)  echo "EDIT"
+            5)  read -p "Enter [Name]: " name
+                read -p "Enter [Surname]: " surname
+                read -p "Enter [Phone]: " phone
+                read -p "Enter [Email]: " email
+                
+                res=$( search_contact_person "$storage_file" "$name" "$surname" )
+                
+                if [[ -n "$res" ]]; then
+                    echo -e "\n$name,$surname,$phone,$email => $res"
+                    remove_contact_person "$storage_file" "$name" "$surname"
+                    add_contact_person "$storage_file" "$name" "$surname" "$phone" "$email"
+                else
+                    echo -e "\nDO NOT FIND"
+                fi
             ;;
             *)  echo
                 echo "CAN NOT RECOGNIZE."

@@ -7,32 +7,13 @@ view_address_book () {
 }
 
 search_contact_person () {
-    res=$( sed -nr "/^$2/p" "$1" )
-    
-    if [[ -n "$res" ]]; then
-        echo -e "\n$res"
-    else
-        echo -e "\nDO NOT FIND"
-    fi
+    sed -nr "/\<$2,$3\>/p" "$1"
 }
 
 add_contact_person () {
     echo "$2,$3,$4,$5" >> "$1"
-    
-    if [[ "$?" == 0 ]]; then
-        echo -e "\nADD CONTACT PERSON SUCCEEDS"
-    else
-        echo -e "\nADD CONTACT PERSON FAILS"
-    fi
 }
 
 remove_contact_person () {
-    res=$( sed -nr "/\<$2\>/p" "$1" )
-    
-    if [[ -n "$res" ]]; then
-        echo -e "\nREMOVE $res"
-        sed -i "/\<$2\>/d" "$1"
-    else
-        echo -e "\nNO RECORD IS REMOVED"
-    fi
+    sed -i "/\<$2,$3\>/d" "$1"
 }
